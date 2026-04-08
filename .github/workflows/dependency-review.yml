@@ -1,0 +1,50 @@
+name: Dependency Review
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  dependency-review:
+    name: Review dependency changes
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check dependency review support
+        id: support
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          status_code="$(
+            curl -sS -o /tmp/dependency-review.json -w "%{http_code}" \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/${{ github.repository }}/dependency-graph/compare/${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}"
+          )"
+
+          if [ "$status_code" = "200" ]; then
+            echo "supported=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "supported=false" >> "$GITHUB_OUTPUT"
+          echo "Dependency review is unavailable for this repository (HTTP ${status_code})."
+          echo "Enable GitHub Dependency Graph in repository security settings to enforce this check."
+
+      - name: Dependency review
+        if: steps.support.outputs.supported == 'true'
+        uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: high
+
+      - name: Explain skipped dependency review
+        if: steps.support.outputs.supported != 'true'
+        run: |
+          echo "Skipping dependency review because GitHub Dependency Graph is not enabled for this repository."
