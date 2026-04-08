@@ -2,7 +2,9 @@ from setuptools import setup, find_packages
 import subprocess
 
 about = {}
-with open('warp/version.py', 'r', encoding='utf8') as file:
+version_file = 'warp/version.py'
+about['__file__'] = version_file
+with open(version_file, 'r', encoding='utf8') as file:
     exec(file.read(), about)
 
 def getRequirements():
