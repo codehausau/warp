@@ -9,6 +9,9 @@ on:
     types:
       - closed
 
+permissions:
+  contents: read
+
 jobs:
   build_container_with_docker:
     runs-on: ubuntu-latest
