@@ -115,11 +115,11 @@ warpGlobals.i18n.phrases = {
     "Name cannot be empty.": "Le nom ne peut être vide",
     "All fields are mandatory": "Tous les champs sont obligatoires",
     "ARE YOU SURE TO DELETE USER: %{user}?": "ÊTES-VOUS SÛR DE SUPPRIMER L'UTILISATEUR: %{user}?",
-    "User has XXX bookin(s) ... ":
-        "L'utilisateur a des réservations passées. Supprimer l'utilisateur supprimera les réservations passées des rapports.||||"+
-        "L'utilisateur a %{smart_count} réservations passées. Supprimer l'utilisateur supprimera les réservations passées des rapports.",
-    "You will delete the log of user's past bookings. It is usually a better idea to BLOCK the user.":
-        "Vous allez supprimer les logs des réservations passées de cet utilisateur. C'est généralement une meilleure idée de BLOQUER l'utilisateur.",
+    "User has XXX bookin(s) in the past. Force delete will archive the account, preserve report history, and remove future bookings and access.":
+        "L'utilisateur a une réservation passée. La suppression forcée archivera le compte, conservera l'historique dans les rapports et supprimera les futures réservations et accès.||||"+
+        "L'utilisateur a %{smart_count} réservations passées. La suppression forcée archivera le compte, conservera l'historique dans les rapports et supprimera les futures réservations et accès.",
+    "Deleting a user with past bookings will archive the account instead. Past bookings stay in reports, while future bookings and access are removed.":
+        "La suppression d'un utilisateur ayant des réservations passées archivera le compte à la place. Les réservations passées resteront dans les rapports, tandis que les futures réservations et accès seront supprimés.",
     "Are you sure to delete user: %{user}": "Êtes vous sûr de vouloir supprimer : %{user}",
     "Select users to which the seat will be assigned:": "Sélectionnez les utilisateurs auxquels ces sièges seront assignés :",
     "The seat is available to be booked on the selected dates and time.":

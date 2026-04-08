@@ -115,11 +115,11 @@ warpGlobals.i18n.phrases = {
     "Name cannot be empty.": "El nombre no puede estar vacío.",
     "All fields are mandatory": "Todos los campos son obligatorios!",
     "ARE YOU SURE TO DELETE USER: %{user}?": "¿ESTÁ SEGURO DE BORRAR EL USUARIO: %{user}?",
-    "User has XXX bookin(s) ... ":
-        "El usuario tiene reservas pasadas y borrarlo también eliminará el histórico del mismo.||||"+
-        "El usuario tiene %{smart_count} reservas pasadas y borrarlo también eliminará el histórico del mismo.",
-    "You will delete the log of user's past bookings. It is usually a better idea to BLOCK the user.":
-        "Esta acción también borrará el registro histórico de reservas del usuario, para evitar esto es recomendable bloquear su cuenta sin borrarla.",
+    "User has XXX bookin(s) in the past. Force delete will archive the account, preserve report history, and remove future bookings and access.":
+        "El usuario tiene una reserva pasada. El borrado forzado archivará la cuenta, conservará el historial en los reportes y eliminará futuras reservas y accesos.||||"+
+        "El usuario tiene %{smart_count} reservas pasadas. El borrado forzado archivará la cuenta, conservará el historial en los reportes y eliminará futuras reservas y accesos.",
+    "Deleting a user with past bookings will archive the account instead. Past bookings stay in reports, while future bookings and access are removed.":
+        "Si el usuario tiene reservas pasadas, la cuenta se archivará en lugar de borrarse. Las reservas pasadas permanecerán en los reportes, mientras que las futuras reservas y accesos se eliminarán.",
     "Are you sure to delete user: %{user}": "¿Está seguro de borrar el usuario: %{user}?",
     "Select users to which the seat will be assigned:": "Seleccione los usuarios a los que le asignará el asiento:",
     "The seat is available to be booked on the selected dates and time.":

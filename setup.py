@@ -1,7 +1,9 @@
 from setuptools import setup, find_packages
 import subprocess
 
-version = "2.0"
+about = {}
+with open('warp/version.py', 'r', encoding='utf8') as file:
+    exec(file.read(), about)
 
 def getRequirements():
     with open('requirements.txt', 'r') as file:
@@ -22,13 +24,13 @@ def getRequirements():
 #            check=True, capture_output=True, text=True) \
 #            .stdout.rstrip()
 #
-#    return f'{version}-{githash}{dirtyStr}'
+#    return f"{about['VERSION']}-{githash}{dirtyStr}"
 
 
 setup(
     name='warp',
     packages=find_packages(),
-    version='2.0.dev1',
+    version=about['get_version'](),
     include_package_data=True,
     install_requires=getRequirements(),
 )

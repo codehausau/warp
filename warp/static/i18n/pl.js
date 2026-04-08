@@ -115,12 +115,12 @@ warpGlobals.i18n.phrases = {
     "Name cannot be empty.": "Nazwisko nie może być puste",
     "All fields are mandatory": "Wszystkie pola są wymagane",
     "ARE YOU SURE TO DELETE USER: %{user}?": "CZY JESTEŚ PEWIEN, ŻE CHCESZ USUNĄĆ UŻYTKOWNIKA: %{user}?",
-    "User has XXX bookin(s) ... ":
-        "Użytkownik ma jedną rezerwację w przeszłości. Usunięcie tego użytkownika spowoduje usunięcie tej rezerwacji z raportu.||||"+
-        "Użytkownik ma %{smart_count} rezerwacje w przeszłości. Usunięcie tego użytkownika spowoduje usunięcie tych rezerwacji z raportu.||||"+
-        "Użytkownik ma %{smart_count} rezerwacji w przeszłości. Usunięcie tego użytkownika spowoduje usunięcie tych rezerwacji z raportu.",
-    "You will delete the log of user's past bookings. It is usually a better idea to BLOCK the user.":
-        "Usuniesz również historię rezerwacji tego użytkownika. Z tego powodu zaleca się zablokowanie konta zamiast usuwania.",
+    "User has XXX bookin(s) in the past. Force delete will archive the account, preserve report history, and remove future bookings and access.":
+        "Użytkownik ma jedną rezerwację w przeszłości. Wymuszone usunięcie zarchiwizuje konto, zachowa historię w raportach i usunie przyszłe rezerwacje oraz dostęp.||||"+
+        "Użytkownik ma %{smart_count} rezerwacje w przeszłości. Wymuszone usunięcie zarchiwizuje konto, zachowa historię w raportach i usunie przyszłe rezerwacje oraz dostęp.||||"+
+        "Użytkownik ma %{smart_count} rezerwacji w przeszłości. Wymuszone usunięcie zarchiwizuje konto, zachowa historię w raportach i usunie przyszłe rezerwacje oraz dostęp.",
+    "Deleting a user with past bookings will archive the account instead. Past bookings stay in reports, while future bookings and access are removed.":
+        "Usunięcie użytkownika z historycznymi rezerwacjami spowoduje zarchiwizowanie konta zamiast pełnego usunięcia. Dawne rezerwacje pozostaną w raportach, a przyszłe rezerwacje i dostęp zostaną usunięte.",
     "Are you sure to delete user: %{user}": "Czy jesteś pewien, że chcesz usunąć użytkownika: %{user}",
     "Select users to which the seat will be assigned:": "Wybierz użytkowników, do których zostanie przypisane miejce:",
     "The seat is available to be booked on the selected dates and time.":
