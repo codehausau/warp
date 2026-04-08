@@ -35,4 +35,9 @@ setup(
     version=about['get_version'](),
     include_package_data=True,
     install_requires=getRequirements(),
+    entry_points={
+        'console_scripts': [
+            'warp=warp.cli:main',
+        ],
+    },
 )

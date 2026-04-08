@@ -11,6 +11,9 @@ def create_app():
     from . import db
     db.init(app)
 
+    from . import admin_cli
+    admin_cli.init(app)
+
     from . import view
     app.register_blueprint(view.bp)
 
