@@ -1,9 +1,12 @@
 import json
 import os
+from warp.version import get_runtime_version
 
 __all__ = ['initConfig']
 
 class DefaultSettings(object):
+
+    VERSION = get_runtime_version()
 
     LANGUAGE_FILE="i18n/en.js"
 

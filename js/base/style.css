@@ -17,6 +17,26 @@ NAV {
     padding: 10px;
 }
 
+.app-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-right: 8px;
+}
+
+.warp-version {
+    color: rgba(255,255,255,0.8);
+    font-size: 0.8rem;
+    line-height: 64px;
+    white-space: nowrap;
+}
+
+.index_version {
+    color: #9e9e9e;
+    font-size: 0.95rem;
+    margin-top: 10px;
+}
+
 .warp-container {
     display: flex;
     flex-flow: column;
@@ -178,6 +198,13 @@ NAV {
     .zonemap_datetime_trigger {
         display: block;
         z-index: 2;
+    }
+}
+
+@media only screen and (max-width : 600px) {
+    .warp-version {
+        line-height: 56px;
+        font-size: 0.75rem;
     }
 }
 

@@ -142,24 +142,57 @@ def delete():
 
     login = action_data['login']
     force = action_data.get('force', False)
+    today = utils.today()
 
-    if not force:
-        today = utils.today()
+    pastBookCount = Book.select(COUNT_STAR) \
+                   .where(Book.login == login) \
+                   .where(Book.fromts < today) \
+                   .scalar()
 
-        rowCount = Book.select(COUNT_STAR) \
-                       .where(Book.login == login) \
-                       .where(Book.fromts < today) \
-                       .scalar()
-
-        if rowCount:
-            return {"msg": "User has past bookings", "bookCount": rowCount, "code": 173}, 406
+    if pastBookCount and not force:
+        return {"msg": "User has past bookings", "bookCount": pastBookCount, "code": 173}, 406
 
     try:
         with DB.atomic():
 
-            # rowCount ?
-            Users.delete().where(Users.login == login) \
+            if pastBookCount:
+                # Keep the user row so historical bookings stay visible in reports,
+                # but remove future activity and access to effectively retire account.
+                Book.delete() \
+                    .where(Book.login == login) \
+                    .where(Book.tots >= today) \
+                    .execute()
+
+                SeatAssign.delete() \
+                    .where(SeatAssign.login == login) \
+                    .execute()
+
+                Groups.delete() \
+                    .where(Groups.login == login) \
+                    .execute()
+
+                ZoneAssign.delete() \
+                    .where(ZoneAssign.login == login) \
+                    .execute()
+
+                rowCount = Users.update({
+                        Users.account_type: ACCOUNT_TYPE_BLOCKED,
+                        Users.password: None,
+                    }) \
+                    .where(Users.login == login) \
+                    .where(Users.account_type < ACCOUNT_TYPE_GROUP) \
+                    .execute()
+
+                if rowCount != 1:
+                    return {"msg": "Error", "code": 174}, 400
+
+                return {"msg": "ok", "action": "archived" }, 200
+
+            rowCount = Users.delete().where(Users.login == login) \
                  .execute()
+
+            if rowCount != 1:
+                return {"msg": "Error", "code": 174}, 400
 
     except IntegrityError:
         return {"msg": "Error", "code":  174}, 400
@@ -183,5 +216,3 @@ def groups(login):
         response=orjson.dumps(res),
         status=200,
         mimetype='application/json')
-
-

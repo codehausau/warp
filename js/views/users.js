@@ -208,7 +208,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
                             }
 
                             let bookCount = value.response['bookCount'] || 0;
-                            let msg = TR("User has XXX bookin(s) ... ",{smart_count:bookCount});
+                            let msg = TR("User has XXX bookin(s) in the past. Force delete will archive the account, preserve report history, and remove future bookings and access.",{smart_count:bookCount});
                             WarpModal.getInstance().open(
                                 TR("ARE YOU SURE TO DELETE USER: %{user}?",{user:loginEl.value}),
                                 msg,modalOptions);
@@ -224,7 +224,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
                     onButtonHook: modalBtnClicked
                 }
 
-                var msg = TR("You will delete the log of user's past bookings. It is usually a better idea to BLOCK the user.");
+                var msg = TR("Deleting a user with past bookings will archive the account instead. Past bookings stay in reports, while future bookings and access are removed.");
                 WarpModal.getInstance().open(TR("Are you sure to delete user: %{user}",{user:loginEl.value}),msg,modalOptions);
 
             };
@@ -345,4 +345,3 @@ document.addEventListener("DOMContentLoaded", function(e) {
     });
 
 });
-

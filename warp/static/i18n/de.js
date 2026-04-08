@@ -115,11 +115,11 @@ warpGlobals.i18n.phrases = {
     "Name cannot be empty.": "Der Name darf nicht leer sein",
     "All fields are mandatory": "Alle Felder sind Pflichtfelder",
     "ARE YOU SURE TO DELETE USER: %{user}?": "Möchtest du diesen Nutzenden löschen: %{user}?",
-    "User has XXX bookin(s) ... ":
-        "Der Benutzer hat eine Buchung in der Vergangenheit. Wenn Sie den Benutzer löschen, wird die vergangene Buchung aus dem Bericht gelöscht.||||"+
-        "Der Benutzer hat %{smart_count} Buchungen in der Vergangenheit. Wenn Sie den Benutzer löschen, werden die vergangenen Buchungen aus dem Bericht gelöscht.",
-    "Sie löschen das Protokoll der vergangenen Buchungen des Benutzers. In der Regel ist es besser, den Benutzer zu BLOCKIEREN.":
-        "Sie löschen das Protokoll der vergangenen Buchungen des Benutzers. In der Regel ist es besser, den Benutzer zu BLOCKIEREN.",
+    "User has XXX bookin(s) in the past. Force delete will archive the account, preserve report history, and remove future bookings and access.":
+        "Der Benutzer hat eine Buchung in der Vergangenheit. Das erzwungene Löschen archiviert das Konto, erhält die Berichts-Historie und entfernt zukünftige Buchungen sowie Zugriffe.||||"+
+        "Der Benutzer hat %{smart_count} Buchungen in der Vergangenheit. Das erzwungene Löschen archiviert das Konto, erhält die Berichts-Historie und entfernt zukünftige Buchungen sowie Zugriffe.",
+    "Deleting a user with past bookings will archive the account instead. Past bookings stay in reports, while future bookings and access are removed.":
+        "Benutzer mit vergangenen Buchungen werden stattdessen archiviert. Vergangene Buchungen bleiben in Berichten erhalten, zukünftige Buchungen und Zugriffe werden entfernt.",
     "Are you sure to delete user: %{user}": "Sind Sie sicher, dass Sie Benutzer: %{user} löschen wollen?",
     "Select users to which the seat will be assigned:": "Wählen Sie die Benutzer aus, denen der Platz zugewiesen werden soll:",
     "The seat is available to be booked on the selected dates and time.":

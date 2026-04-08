@@ -115,11 +115,11 @@ warpGlobals.i18n.phrases = {
     "Name cannot be empty.": "Nazwisko nie może być puste",
     "All fields are mandatory": "Wszystkie pola są wymagane",
     "ARE YOU SURE TO DELETE USER: %{user}?": "CZY JESTEŚ PEWIEN, ŻE CHCESZ USUNĄĆ UŻYTKOWNIKA: %{user}?",
-    "User has XXX bookin(s) ... ":
-        "User has a booking in the past. Deleting the user will delete the past booking from the report.||||"+
-        "User has %{smart_count} bookings in the past. Deleting the user will delete past bookings from the report.",
-    "You will delete the log of user's past bookings. It is usually a better idea to BLOCK the user.":
-        "You will delete the log of user's past bookings. It is usually a better idea to BLOCK the user.",
+    "User has XXX bookin(s) in the past. Force delete will archive the account, preserve report history, and remove future bookings and access.":
+        "User has a booking in the past. Force delete will archive the account, preserve report history, and remove future bookings and access.||||"+
+        "User has %{smart_count} bookings in the past. Force delete will archive the account, preserve report history, and remove future bookings and access.",
+    "Deleting a user with past bookings will archive the account instead. Past bookings stay in reports, while future bookings and access are removed.":
+        "Deleting a user with past bookings will archive the account instead. Past bookings stay in reports, while future bookings and access are removed.",
     "Are you sure to delete user: %{user}": "Are you sure to delete user: %{user}",
     "Select users to which the seat will be assigned:": "Select users to which the seat will be assigned:",
     "The seat is available to be booked on the selected dates and time.":

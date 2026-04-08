@@ -43,7 +43,8 @@ def headerDataInit():
 
     return { "headerDataL": headerDataL,
              "headerDataR": headerDataR,
-             'hasLogout': 'auth.logout' in flask.current_app.view_functions
+             'hasLogout': 'auth.logout' in flask.current_app.view_functions,
+             'appVersion': flask.current_app.config.get('VERSION')
     }
 
 @bp.route("/")

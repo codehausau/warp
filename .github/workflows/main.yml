@@ -1,4 +1,13 @@
-on: [push]
+name: CI
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+  pull_request_target:
+    types:
+      - closed
 
 jobs:
   build_container_with_docker:
@@ -6,7 +15,19 @@ jobs:
     name: Build container with Docker
     steps:
     - name: Checkout
-      uses: actions/checkout@v1
+      uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+    - name: Install test dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libpq-dev
+        python -m pip install --upgrade pip setuptools wheel
+        python -m pip install -r requirements.txt
+    - name: Run unit tests
+      run: python -m unittest discover -s tests
     - name: Build docker image and run a smoke test
       id: build_docker_image
       run: |
@@ -14,3 +35,45 @@ jobs:
         docker run -d -p 5000:5000 --name warp warp:latest
         sleep 10
         docker rm -f warp
+
+  bump_version:
+    name: Bump Version
+    needs: build_container_with_docker
+    if: github.event_name == 'pull_request_target' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        ref: refs/heads/main
+        fetch-depth: 0
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+    - name: Check merge commit is on main
+      id: merge_check
+      run: |
+        if git merge-base --is-ancestor "${{ github.event.pull_request.merge_commit_sha }}" HEAD; then
+          echo "should_bump=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "Merged PR commit is not on the current main branch anymore; skipping version bump"
+          echo "should_bump=false" >> "$GITHUB_OUTPUT"
+        fi
+    - name: Bump patch version
+      id: bump
+      if: steps.merge_check.outputs.should_bump == 'true'
+      run: |
+        NEW_VERSION="$(python scripts/bump_version.py patch)"
+        echo "new_version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
+    - name: Commit and tag version bump
+      if: steps.merge_check.outputs.should_bump == 'true'
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git add warp/version.py
+        git commit -m "chore: bump version to ${{ steps.bump.outputs.new_version }} [skip ci]"
+        git tag "v${{ steps.bump.outputs.new_version }}"
+        git push origin HEAD:main --follow-tags
