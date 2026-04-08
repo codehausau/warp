@@ -443,6 +443,22 @@ python -c 'from getpass import getpass; from werkzeug.security import generate_p
 
 ```
 
+### Administration CLI
+
+WARP also provides a CLI for common user-management tasks:
+
+```bash
+warp admin user list
+warp admin user create alice --name "Alice Example" --generate-password
+warp admin user update alice --name "Alice Smith"
+warp admin user block alice
+warp admin user unblock alice --role user
+warp admin user reset-password alice --generate-password
+warp admin user delete alice --force
+```
+
+These commands use the same application configuration and database settings as the web app, so make sure your `WARP_DATABASE` and related settings are available before running them.
+
 ## Azure Active Directory authentication
 
 WARP supports authentication against an Azure AD application.
