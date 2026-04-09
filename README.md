@@ -67,10 +67,38 @@ From the command line:
 $ git clone https://github.com/sebo-b/warp.git
 $ cd warp
 
-$ docker compose -f demo_compose.yaml up
+$ docker compose -f demo_compose.yaml --profile warp up
 ```
 
 After that, open http://127.0.0.1:8080 in your browser and log in as `admin` with password `noneshallpass`.
+
+### docker compose with Traefik and subpath routing
+
+The demo compose file now includes two profiles:
+
+- `warp`: PostgreSQL, uWSGI, and nginx
+- `traefik`: Traefik reverse proxy
+
+That means you can start:
+
+```bash
+# WARP stack only
+$ docker compose -f demo_compose.yaml --profile warp up
+
+# Traefik only
+$ docker compose -f demo_compose.yaml --profile traefik up
+
+# Full stack with Traefik in front of WARP
+$ docker compose -f demo_compose.yaml --profile warp --profile traefik up
+```
+
+With both profiles enabled:
+
+- direct access is still available at `http://127.0.0.1:8080`
+- Traefik serves WARP at `http://127.0.0.1:8090/warp`
+- the Traefik dashboard is available at `http://127.0.0.1:8081`
+
+The bundled Traefik setup is intentionally lightweight and local-development oriented. It uses plain HTTP by default, discovers the WARP route from Docker labels on the nginx service, and the app is now proxy-aware so it works correctly when routed under a stripped subpath such as `/warp`.
 
 ### without docker compose (but why?)
 
@@ -150,6 +178,8 @@ Each configuration parameter (check config.py) can be passed via the envirnoment
 As environment variables as passed as strings, they need to be parsed into Python types and data structures.
 To do that values are first converted to lower case and then `json.loads` is used. If that fails variable is treaten as string.
 This makes possible to pass integers, floats, booleans as well as dicts, arrays and None value (as JSON null).
+
+If WARP is deployed behind a reverse proxy that sets forwarded headers, enable `WARP_USE_PROXY_FIX=true` so Flask honors values such as `X-Forwarded-Proto`, `X-Forwarded-Host`, and `X-Forwarded-Prefix`. This is especially important when serving WARP behind a subpath through Traefik's `StripPrefix` middleware.
 
 ### SECRET_KEY
 
