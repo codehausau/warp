@@ -8,11 +8,8 @@ DROP TABLE IF EXISTS groups;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS blobs;
 
-DROP TRIGGER IF EXISTS zone_assign_update on zone_assign;
-DROP TRIGGER IF EXISTS groups_update on groups;
-DROP TRIGGER IF EXISTS book_overlap_insert_trig on book;
-
 DROP FUNCTION IF EXISTS update_user_to_zone_roles;
-DROP FUNCTION IF EXISTS book_overlap_insert;
+DROP FUNCTION IF EXISTS set_book_zone_group;
+DROP FUNCTION IF EXISTS sync_book_zone_group_from_zone;
 
 DROP TABLE IF EXISTS db_initialized;

@@ -1,4 +1,6 @@
 
+CREATE EXTENSION IF NOT EXISTS btree_gist;
+
 CREATE TABLE blobs (
     id SERIAL PRIMARY KEY,
     mimetype text NOT NULL,
@@ -70,6 +72,7 @@ CREATE TABLE book (
     id SERIAL PRIMARY KEY,
     login text NOT NULL,
     sid integer NOT NULL,
+    zone_group integer NOT NULL,
     fromts integer NOT NULL,
     tots integer NOT NULL,
     FOREIGN KEY (login) REFERENCES users(login) ON DELETE CASCADE,
@@ -87,6 +90,72 @@ ON book(fromts);
 
 CREATE INDEX book_toTS
 ON book(tots);
+
+ALTER TABLE book
+ADD CONSTRAINT book_time_order
+CHECK (fromts < tots);
+
+CREATE FUNCTION set_book_zone_group()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $$
+BEGIN
+    SELECT z.zone_group
+    INTO NEW.zone_group
+    FROM seat s
+    JOIN zone z ON z.id = s.zid
+    WHERE s.id = NEW.sid
+    LIMIT 1;
+
+    IF NEW.zone_group IS NULL THEN
+        RAISE EXCEPTION 'Unknown seat';
+    END IF;
+
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER book_set_zone_group_trig
+BEFORE INSERT OR UPDATE OF sid ON book
+FOR EACH ROW
+EXECUTE PROCEDURE set_book_zone_group();
+
+CREATE FUNCTION sync_book_zone_group_from_zone()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $$
+BEGIN
+    UPDATE book b
+    SET zone_group = NEW.zone_group
+    FROM seat s
+    WHERE b.sid = s.id
+      AND s.zid = NEW.id
+      AND b.zone_group IS DISTINCT FROM NEW.zone_group;
+
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER zone_update_book_zone_group
+AFTER UPDATE OF zone_group ON zone
+FOR EACH ROW
+WHEN (OLD.zone_group IS DISTINCT FROM NEW.zone_group)
+EXECUTE PROCEDURE sync_book_zone_group_from_zone();
+
+ALTER TABLE book
+ADD CONSTRAINT book_no_seat_overlap
+EXCLUDE USING gist (
+    sid WITH =,
+    int4range(fromts, tots, '[)') WITH &&
+);
+
+ALTER TABLE book
+ADD CONSTRAINT book_no_user_zone_group_overlap
+EXCLUDE USING gist (
+    login WITH =,
+    zone_group WITH =,
+    int4range(fromts, tots, '[)') WITH &&
+);
 
 CREATE MATERIALIZED VIEW user_to_zone_roles ("login",zid,zone_role) AS
     with recursive zone_assign_expanded("login",zid,zone_role,account_type) as (
@@ -157,34 +226,3 @@ EXECUTE PROCEDURE update_user_to_zone_roles();
 -- WHERE u.account_type < 100
 -- GROUP BY u.login, za.zid
 
-
-CREATE FUNCTION book_overlap_insert()
- RETURNS trigger
- LANGUAGE plpgsql
-AS $$
-BEGIN
-    IF NEW.fromTS >= NEW.toTS THEN
-        RAISE EXCEPTION 'Incorect time';
-    END IF;
-
-    IF
-        (SELECT 1 FROM book b
-         JOIN seat s on b.sid = s.id
-         JOIN zone z on s.zid = z.id
-         WHERE z.zone_group =
-            (SELECT zone_group FROM zone z JOIN seat s on z.id = s.zid WHERE s.id = NEW.sid LIMIT 1)
-         AND (b.sid = NEW.sid OR b.login = NEW.login)
-         AND b.fromTS < NEW.toTS
-         AND b.toTS > NEW.fromTS) IS NOT NULL
-    THEN
-        RAISE 'Overlapping time for this seat or users' USING ERRCODE = 'exclusion_violation';
-    END IF;
-
-    RETURN NEW;
-END;
-$$;
-
-CREATE TRIGGER book_overlap_insert_trig
-BEFORE INSERT ON book
-FOR EACH ROW
-EXECUTE PROCEDURE book_overlap_insert();

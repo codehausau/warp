@@ -16,7 +16,7 @@ Groups = Table('groups',('group','login'))
 Seat = Table('seat',('id','zid','name','x','y','enabled'))
 Zone = Table('zone',('id','zone_group','name','iid'))
 ZoneAssign = Table('zone_assign',('zid','login','zone_role'))
-Book = Table('book',('id','login','sid','fromts','tots'))
+Book = Table('book',('id','login','sid','zone_group','fromts','tots'))
 SeatAssign = Table('seat_assign',('sid','login'))
 
 UserToZoneRoles = Table('user_to_zone_roles',('login','zid','zone_role'))
