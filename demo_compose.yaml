@@ -30,12 +30,21 @@ services:
       - ./res/nginx.conf:/etc/nginx/conf.d/default.conf:ro
     ports:
       - "8080:80"
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "warp-demo-proxy"
+      traefik.http.routers.warp.rule: "PathPrefix(`/warp`)"
+      traefik.http.routers.warp.entrypoints: "web"
+      traefik.http.routers.warp.service: "warp"
+      traefik.http.routers.warp.middlewares: "warp-strip"
+      traefik.http.middlewares.warp-strip.stripprefix.prefixes: "/warp"
+      traefik.http.services.warp.loadbalancer.server.port: "80"
     networks:
       - warp-demo-app
       - warp-demo-proxy
 
   warp-demo-traefik:
-    image: traefik:v3.0
+    image: traefik:v3.4
     profiles: ["traefik"]
     command:
       - "--configFile=/etc/traefik/traefik.yaml"
@@ -44,7 +53,7 @@ services:
       - "8081:8080"
     volumes:
       - ./res/traefik/traefik.yaml:/etc/traefik/traefik.yaml:ro
-      - ./res/traefik/dynamic.yaml:/etc/traefik/dynamic.yaml:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - warp-demo-proxy
 

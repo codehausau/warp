@@ -7,6 +7,5 @@ entryPoints:
     address: ":80"
 
 providers:
-  file:
-    filename: /etc/traefik/dynamic.yaml
-    watch: true
+  docker:
+    exposedByDefault: false

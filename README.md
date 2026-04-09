@@ -98,7 +98,7 @@ With both profiles enabled:
 - Traefik serves WARP at `http://127.0.0.1:8090/warp`
 - the Traefik dashboard is available at `http://127.0.0.1:8081`
 
-The bundled Traefik setup is intentionally lightweight and local-development oriented. It uses plain HTTP by default, but the app is now proxy-aware and works correctly when routed under a stripped subpath such as `/warp`.
+The bundled Traefik setup is intentionally lightweight and local-development oriented. It uses plain HTTP by default, discovers the WARP route from Docker labels on the nginx service, and the app is now proxy-aware so it works correctly when routed under a stripped subpath such as `/warp`.
 
 ### without docker compose (but why?)
 
