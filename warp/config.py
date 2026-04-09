@@ -9,6 +9,12 @@ class DefaultSettings(object):
     VERSION = get_runtime_version()
 
     LANGUAGE_FILE="i18n/en.js"
+    USE_PROXY_FIX = False
+    PROXY_FIX_X_FOR = 1
+    PROXY_FIX_X_PROTO = 1
+    PROXY_FIX_X_HOST = 1
+    PROXY_FIX_X_PORT = 1
+    PROXY_FIX_X_PREFIX = 1
 
     # after how many days force user to re-login (note that it is not a session timeout)
     SESSION_LIFETIME = 1

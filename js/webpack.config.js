@@ -42,7 +42,7 @@ async function generateConfig() {
 
     return new HtmlWebpackPlugin({
       filename: path.join(htmlOutputDir, chunkName+'.html'),
-      publicPath: '/static/dist',
+      publicPath: "{{ url_for('static', filename='dist') }}/",
       minify: true,
       chunks: [chunkName],
       inject: false,

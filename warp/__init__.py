@@ -8,6 +8,16 @@ def create_app():
 
     initConfig(app)
 
+    if app.config.get('USE_PROXY_FIX'):
+        app.wsgi_app = ProxyFix(
+            app.wsgi_app,
+            x_for=app.config.get('PROXY_FIX_X_FOR', 1),
+            x_proto=app.config.get('PROXY_FIX_X_PROTO', 1),
+            x_host=app.config.get('PROXY_FIX_X_HOST', 1),
+            x_port=app.config.get('PROXY_FIX_X_PORT', 1),
+            x_prefix=app.config.get('PROXY_FIX_X_PREFIX', 1),
+        )
+
     from . import db
     db.init(app)
 
