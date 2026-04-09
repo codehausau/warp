@@ -3,7 +3,7 @@ import re
 import subprocess
 from pathlib import Path
 
-VERSION = "2.0.3"
+VERSION = "2.0.4"
 
 
 def _repo_root():
