@@ -1,8 +1,11 @@
 import os
+import pathlib
+import tempfile
 import unittest
 from unittest import mock
 
 import werkzeug
+from jinja2 import ChoiceLoader, FileSystemLoader
 
 from warp import create_app
 
@@ -10,6 +13,18 @@ from warp import create_app
 class ProxyPrefixTests(unittest.TestCase):
 
     def setUp(self):
+        self.tempdir = tempfile.TemporaryDirectory()
+        template_root = pathlib.Path(self.tempdir.name)
+        headers_dir = template_root / "headers"
+        headers_dir.mkdir(parents=True, exist_ok=True)
+        (headers_dir / "base.html").write_text(
+            (
+                '<script defer="defer" '
+                'src="{{ url_for(\'static\', filename=\'dist/base.test.js\') }}"></script>'
+            ),
+            encoding="utf-8",
+        )
+
         self.env_patcher = mock.patch.dict(
             os.environ,
             {
@@ -22,6 +37,7 @@ class ProxyPrefixTests(unittest.TestCase):
 
     def tearDown(self):
         self.env_patcher.stop()
+        self.tempdir.cleanup()
 
     def _create_client(self, use_proxy_fix):
         env = {"WARP_USE_PROXY_FIX": "true" if use_proxy_fix else "false"}
@@ -32,6 +48,9 @@ class ProxyPrefixTests(unittest.TestCase):
              mock.patch.object(werkzeug, "__version__", "3", create=True):
             app = create_app()
             app.testing = True
+            app.jinja_loader = ChoiceLoader(
+                [FileSystemLoader(self.tempdir.name), app.jinja_loader]
+            )
             return app.test_client()
 
     def test_login_page_uses_forwarded_prefix_in_generated_urls(self):
